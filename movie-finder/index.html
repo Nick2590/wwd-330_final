@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Movie Finder</title>
+  <link rel="stylesheet" href="styles/style.css" />
+  <script type="module" src="scripts/main.js"></script>
+</head>
+<body>
+  <header>
+    <h1>Movie Finder</h1>
+    <p>Search for movies and see basic info</p>
+  </header>
+
+  <main>
+    <section class="search-section">
+      <form id="search-form">
+        <input
+          type="text"
+          id="search-input"
+          placeholder="Search for a movie..."
+          required
+        />
+        <button type="submit">Search</button>
+      </form>
+
+      <div class="filters">
+        <label for="min-rating">Minimum Rating:</label>
+        <select id="min-rating">
+          <option value="0">All</option>
+          <option value="5">5+</option>
+          <option value="6">6+</option>
+          <option value="7">7+</option>
+          <option value="8">8+</option>
+        </select>
+
+        <label for="sort-by">Sort By:</label>
+        <select id="sort-by">
+          <option value="popularity">Popularity</option>
+          <option value="rating">Rating</option>
+          <option value="year">Year</option>
+        </select>
+      </div>
+    </section>
+
+    <section id="status-message"></section>
+
+    <section id="movie-results" class="movie-grid"></section>
+  </main>
+
+  <footer>
+    <p>&copy; 2026 Movie Finder Project</p>
+  </footer>
+</body>
+</html>
