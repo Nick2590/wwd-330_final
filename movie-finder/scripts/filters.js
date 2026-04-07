@@ -10,9 +10,11 @@ export function sortMovies(movies, sortBy) {
   }
 
   if (sortBy === "year") {
-    return copiedMovies.sort(
-      (a, b) => Number((b.release_date || "0").slice(0, 4)) - Number((a.release_date || "0").slice(0, 4))
-    );
+    return copiedMovies.sort((a, b) => {
+      const yearA = Number((a.release_date || "0").slice(0, 4));
+      const yearB = Number((b.release_date || "0").slice(0, 4));
+      return yearB - yearA;
+    });
   }
 
   return copiedMovies.sort((a, b) => b.popularity - a.popularity);
