@@ -67,40 +67,62 @@ async function showMovieDetails(movieId) {
       ? `${IMAGE_BASE}${details.poster_path}`
       : "https://via.placeholder.com/500x750?text=No+Image";
 
-    let providerHTML = "<p>No streaming info available.</p>";
+    let streamingHTML = "<p>No streaming info available.</p>";
 
-    if (providers && providers.flatrate && providers.flatrate.length > 0) {
-      providerHTML = `
-        <div class="providers">
-          ${providers.flatrate
-            .map(
-              (provider) =>
-                `<span class="provider">${provider.provider_name}</span>`
-            )
-            .join("")}
-        </div>
-      `;
+    if (providers) {
+      const allProviders = [
+        ...(providers.flatrate || []),
+        ...(providers.rent || []),
+        ...(providers.buy || [])
+      ];
+
+      const uniqueProviders = [];
+      const seen = new Set();
+
+      allProviders.forEach((provider) => {
+        if (!seen.has(provider.provider_name)) {
+          seen.add(provider.provider_name);
+          uniqueProviders.push(provider);
+        }
+      });
+
+      if (uniqueProviders.length > 0) {
+        streamingHTML = `
+          <div class="providers">
+            ${uniqueProviders
+              .map(
+                (provider) => `
+                  <span class="provider">${provider.provider_name}</span>
+                `
+              )
+              .join("")}
+          </div>
+        `;
+      }
     }
 
     modalContent.innerHTML = `
       <img src="${poster}" alt="${details.title} poster">
       <h2>${details.title}</h2>
+
       <div class="modal-meta">
         <p><strong>Year:</strong> ${getYear(details.release_date)}</p>
         <p><strong>Rating:</strong> ${formatRating(details.vote_average)}</p>
-        <p><strong>Runtime:</strong> ${details.runtime ? details.runtime + " minutes" : "N/A"}</p>
+        <p><strong>Runtime:</strong> ${details.runtime ? `${details.runtime} minutes` : "N/A"}</p>
         <p><strong>Genres:</strong> ${
           details.genres && details.genres.length
             ? details.genres.map((genre) => genre.name).join(", ")
             : "N/A"
         }</p>
       </div>
+
       <p>${details.overview || "No description available."}</p>
+
       <h3>Streaming Platforms</h3>
-      ${providerHTML}
+      ${streamingHTML}
     `;
   } catch (error) {
-    modalContent.innerHTML = "<p>Error loading movie details.</p>";
     console.error(error);
+    modalContent.innerHTML = "<p>Error loading movie details.</p>";
   }
 }
